@@ -5,6 +5,11 @@ use sqlx::{PgPool, Pool, query};
 
 #[async_std::main]
 async fn main() {
+    let app = server().await;
+    app.listen("127.0.0.1:8080").await.unwrap();
+}
+
+async fn server() -> Server<State> {
     dotenv::dotenv().ok();
     pretty_env_logger::init();
 
@@ -21,7 +26,8 @@ async fn main() {
         let json = json!([1, 2, 3]);
         Ok(Response::new(StatusCode::Ok).body_json(&json)?)
     });
-    app.listen("127.0.0.1:8080").await.unwrap();
+
+    app
 }
 
 #[derive(Debug)]
